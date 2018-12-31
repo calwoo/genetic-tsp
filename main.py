@@ -74,13 +74,16 @@ class Evolution:
         ranked = self.rank(population)
         return strategy.select(ranked)
 
-    def mate(self, parents):
+    def mate(self, parents, retain_rate=0.4):
         """
         The strategy for mating for the travelling salesman problem will be that we select randomly a subset of
         the first parent and then fill in the remainder of the route with the second parent in order,
         ensuring that the resulting route is a valid one (unique cities, visited only once).
         """
-        pass
+        children = []
+        
+
+
 
     def create_child(self, parent1, parent2):
         route_length = len(self.cities)
