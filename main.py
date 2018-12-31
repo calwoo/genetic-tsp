@@ -7,6 +7,7 @@ To recall, the traveling salesman problem asks for optimal tours about a group o
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import utils
 
 """
 We need classes to store city nodes and the genetic algorithm.
@@ -60,3 +61,9 @@ class Evolution:
     def fitness(self, individual):
         s = self.score(individual)
         return 1.0 / s
+
+    def population_avg_fitness(self, population):
+        pass
+
+    def rank(self, population):
+        pass
