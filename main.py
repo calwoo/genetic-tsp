@@ -37,7 +37,9 @@ class Evolution:
         self.cities = cities
 
     def create_individual(self):
-        pass
+        # Return a permutation of the cities list
+        permutation = random.sample(cities, len(cities))
+        return permutation
 
     def generate_population(self, size):
         population = []
@@ -46,5 +48,15 @@ class Evolution:
             population.append(new_individual)
         return population
 
+    def score(self, individual):
+        total_dist = 0
+        for i in range(len(individual)):
+            if i == len(individual) - 1:
+                total_dist += individual[i].dist_to(individual[0])
+            else:
+                total_dist += individual[i].dist_to(individual[i+1])
+        return total_dist
+    
     def fitness(self, individual):
-        
+        s = self.score(individual)
+        return 1.0 / s
