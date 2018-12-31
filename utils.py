@@ -44,16 +44,27 @@ class FPSStrat(Strategy):
     def __init__(self, rankings, elite_threshold=0.2):
         self.rankings = rankings
         self.elite_threshold = elite_threshold
-        self.threshold_probability = random.random()
 
+    def cumulative_fitness(self):
+        total_fitness = reduce(lambda x,y: x[1]+y[1], self.rankings)
+        cumulative = []
+        running_total = 0
+        for _, fitness in self.rankings:
+            running_total += fitness
+            cumulative.append(running_total)
+        cumulative = np.array(cumulative)
+        return cumulative / total_fitness
+        
     def select_parents(self):
         parents = []
-        total_fitness = reduce(lambda x,y: x[1]+y[1], self.rankings)
-        fitnesses = [(x[1] / total_fitness) for x in self.rankings]
+        cumulative_fitnesses = self.cumulative_fitness()
         num_of_elites = int(self.elite_threshold * len(self.rankings))
         for i in range(num_of_elites):
             parents.append(self.rankings[i][0])
-        for i in range(num_of_elites, len(self.rankings) - num_of_elites):
-            if self.threshold_probability <= fitnesses[i]:
-                parents.append(self.rankings[i][0])
+        for i in range(num_of_elites, len(self.rankings)):
+            threshold_probability = random.random()
+            for j in range(len(self.rankings)):
+                if threshold_probability <= cumulative_fitnesses[i]:
+                    parents.append(self.rankings[j][0])
+                    break
         return parents
