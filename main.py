@@ -63,11 +63,16 @@ class Evolution:
         return 1.0 / s
 
     def population_avg_fitness(self, population):
-        pass
+        
 
     def rank(self, population):
         fitnesses = list(map(lambda x: self.fitness(x), population))
         zipped = zip(population, fitnesses)
         return sorted(zipped, key=lambda x: x[1], reverse=True)
+
+    def select_parents(self, population, strategy):
+        ranked = self.rank(population)
+        return strategy.select(ranked)
+
     
     
