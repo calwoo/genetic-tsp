@@ -34,17 +34,19 @@ The evolution class stores the methods used to implement the genetic algorithm. 
 - Random mutation method to introduce explorative variation
 """
 class Evolution:
-    def __init__(self, cities):
+    def __init__(self, cities, population_size, elite_threshold=0.2):
         self.cities = cities
+        self.elite_threshold = elite_threshold
+        self.population_size = population_size
 
     def create_individual(self):
         # Return a permutation of the cities list
         permutation = random.sample(cities, len(cities))
         return permutation
 
-    def generate_population(self, size):
+    def generate_population(self):
         population = []
-        for _ in range(size):
+        for _ in range(self.population_size):
             new_individual = self.create_individual()
             population.append(new_individual)
         return population
@@ -81,9 +83,6 @@ class Evolution:
         ensuring that the resulting route is a valid one (unique cities, visited only once).
         """
         children = []
-        
-
-
 
     def create_child(self, parent1, parent2):
         route_length = len(self.cities)

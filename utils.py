@@ -34,11 +34,20 @@ class ElitismStrat(Strategy):
     def __init__(self, rankings, threshold=0.25):
         self.rankings = rankings
         self.threshold = threshold
+        self.population_size = len(self.rankings)
 
     def select_parents(self):
         population_size = len(self.rankings)
-        num_of_parents = int(self.threshold * population_size)
-        return [x[0] for x in self.rankings[:num_of_parents]]
+        num_of_elites = int(self.threshold * population_size)
+        elites = self.rankings[:num_of_elites]
+        parents = []
+        counter = 0
+        while len(parents) < population_size:
+            parents.append(elites[counter])
+            counter += 1
+            if counter == len(elites):
+                counter = 0
+        return parents
 
 class FPSStrat(Strategy):
     def __init__(self, rankings, elite_threshold=0.2):
