@@ -63,7 +63,7 @@ class Evolution:
         return 1.0 / s
 
     def population_avg_fitness(self, population):
-        
+        pass
 
     def rank(self, population):
         fitnesses = list(map(lambda x: self.fitness(x), population))
