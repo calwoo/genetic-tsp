@@ -37,4 +37,14 @@ class Evolution:
         self.cities = cities
 
     def create_individual(self):
+        pass
+
+    def generate_population(self, size):
+        population = []
+        for _ in range(size):
+            new_individual = self.create_individual()
+            population.append(new_individual)
+        return population
+
+    def fitness(self, individual):
         
