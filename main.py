@@ -66,4 +66,8 @@ class Evolution:
         pass
 
     def rank(self, population):
-        pass
+        fitnesses = list(map(lambda x: self.fitness(x), population))
+        zipped = zip(population, fitnesses)
+        return sorted(zipped, key=lambda x: x[1], reverse=True)
+    
+    

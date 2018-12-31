@@ -11,3 +11,4 @@ class Visualizer:
         self.generation = 0
 
     def plot_fitness(self, model):
+        pass
