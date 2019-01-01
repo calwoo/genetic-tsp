@@ -86,7 +86,6 @@ class Evolution:
         """
         num_to_retain = int(self.population_size * self.elite_threshold)
         children = parents[:num_to_retain]
-        print(len(parents), self.population_size)
         for i in range(self.population_size - num_to_retain):
             child = self.create_child(parents[i], parents[self.population_size-i-1])
             children.append(child)
@@ -117,7 +116,7 @@ class Evolution:
         for i in range(len(self.cities)):
             prob = random.random()
             if prob < mutation_rate:
-                swap_index = random.randint(len(self.cities))
+                swap_index = random.randint(0, len(self.cities)-1)
                 # Do the swap
                 temp = child[swap_index]
                 child[swap_index] = child[i]
@@ -145,7 +144,7 @@ class Evolution:
         fitnesses = [current_fitness]
         for i in range(epochs):
             if verbose and i % 20 == 0:
-                print("After %d epochs, fitness is around %.2f" % (i, current_fitness))
+                print("After %d epochs, fitness is around %.6f" % (i, current_fitness))
             current_pop = self.next_generation(current_pop, strategy, mutation_rate)
             current_fitness = self.population_avg_fitness(current_pop)
             fitnesses.append(current_fitness)

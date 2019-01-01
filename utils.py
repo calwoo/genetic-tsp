@@ -64,7 +64,6 @@ class FPSStrat(Strategy):
     def select_parents(self, rankings):
         parents = []
         cumulative_fitnesses = self.cumulative_fitness(rankings)
-        print(cumulative_fitnesses)
         num_of_elites = int(self.elite_threshold * len(rankings))
         for i in range(num_of_elites):
             parents.append(rankings[i][0])
