@@ -76,7 +76,7 @@ class Evolution:
 
     def select_parents(self, population, strategy):
         ranked = self.rank(population)
-        return strategy.select(ranked)
+        return strategy.select_parents(ranked)
 
     def mate(self, parents):
         """
@@ -143,7 +143,7 @@ class Evolution:
 
         fitnesses = [current_fitness]
         for i in range(epochs):
-            if verbose:
+            if verbose and i % 20 == 0:
                 print("After %d epochs, fitness is around %.2f" % (i, current_fitness))
             current_pop = self.next_generation(current_pop, strategy, mutation_rate)
             current_fitness = self.population_avg_fitness(current_pop)
@@ -165,7 +165,8 @@ def generate_cities(num_cities=10, max_x=100, max_y=100):
 
 cities = generate_cities(25, 200, 200)
 model = Evolution(cities, population_size=100, elite_threshold=0.2)
-strategy = FPSStrat()
+strategy = FPSStrat(elite_threshold=0.2)
+results, fitnesses = model.run(epochs=500, strategy=strategy, mutation_rate=0.01, verbose=True)
 
     
     
