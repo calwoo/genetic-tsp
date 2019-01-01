@@ -65,7 +65,9 @@ class Evolution:
         return 1.0 / s
 
     def population_avg_fitness(self, population):
-        pass
+        fitnesses = list(map(lambda ind: self.fitness(ind), population))
+        fitnesses = np.array(fitnesses)
+        return np.mean(fitnesses)
 
     def rank(self, population):
         fitnesses = list(map(lambda x: self.fitness(x), population))
@@ -76,13 +78,18 @@ class Evolution:
         ranked = self.rank(population)
         return strategy.select(ranked)
 
-    def mate(self, parents, retain_rate=0.4):
+    def mate(self, parents):
         """
         The strategy for mating for the travelling salesman problem will be that we select randomly a subset of
         the first parent and then fill in the remainder of the route with the second parent in order,
         ensuring that the resulting route is a valid one (unique cities, visited only once).
         """
-        children = []
+        num_to_retain = int(self.population_size * self.elite_threshold)
+        children = parents[:num_to_retain]
+        for i in range(self.population_size - num_to_retain):
+            child = self.create_child(parents[i], parents[self.population_size-i-1])
+            children.append(child)
+        return children
 
     def create_child(self, parent1, parent2):
         route_length = len(self.cities)
@@ -101,6 +108,30 @@ class Evolution:
                 child.append(parent2_chromosome[next_gene])
                 next_gene += 1
         return child
+
+    def mutate(self, child, mutation_chance=0.05):
+        """
+        Mutation of individuals in the population proceed by swapping a pair of cities in the route randomly.
+        """
+        for i in range(len(self.cities)):
+            prob = random.random()
+            if prob < mutation_chance:
+                swap_index = random.randint(len(self.cities))
+                # Do the swap
+                temp = child[swap_index]
+                child[swap_index] = child[i]
+                child[i] = temp
+        return child
+
+    def mutate_population(self, population, mutation_chance=0.05):
+        mutated_pop = []
+        for i in range(self.population_size):
+            individual = population[i]
+            mutated_individual = self.mutate(individual, mutation_chance)
+            mutated_pop.append(mutated_individual)
+        return mutated_pop
+        
+
 
     
     
