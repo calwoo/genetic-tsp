@@ -149,7 +149,7 @@ class Evolution:
             current_fitness = self.population_avg_fitness(current_pop)
             visualizer.update(current_fitness)
         final_population = self.next_generation(current_pop, strategy, mutation_rate)
-        visualizer.plot_fitness()
+        visualizer.plot_scores()
         return final_population
 
 ### Testing ground

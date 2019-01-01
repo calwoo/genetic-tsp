@@ -28,7 +28,10 @@ class Visualizer:
         plt.show()
 
     def plot_scores(self):
-        pass
+        plt.plot(list(map(lambda x: 1/x[1], self.fitnesses)))
+        plt.ylabel("Average Distance")
+        plt.xlabel("Generation")
+        plt.show()
 
 
 """
