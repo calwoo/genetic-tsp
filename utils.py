@@ -3,8 +3,13 @@ Graphing utils and other functions.
 """
 import numpy as np 
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import random
 from functools import reduce
+from matplotlib import style
+
+style.use('fivethirtyeight')
+fig = plt.figure()
 
 class Visualizer:
     def __init__(self):
@@ -21,18 +26,25 @@ class Visualizer:
         self.fitnesses.append((self.generation, fitness))
         self.generation += 1
 
-    def plot_fitness(self):
+    def plot_fitness(self, i):
         plt.plot(list(map(lambda x:x[1], self.fitnesses)))
         plt.ylabel("Fitness")
         plt.xlabel("Generation")
         plt.show()
 
-    def plot_scores(self):
+    def plot_scores(self, i):
         plt.plot(list(map(lambda x: 1/x[1], self.fitnesses)))
         plt.ylabel("Average Distance")
         plt.xlabel("Generation")
         plt.show()
 
+    def animate_plot(self, plot_type="fitness"):
+        if plot_type == "fitness":
+            func = lambda i: self.plot_fitness(i)
+        elif plot_type == "scores":
+            func = lambda i: self.plot_scores(i)
+        ani = animation.FuncAnimation(fig, func, interval=1000)
+        plt.show()
 
 """
 A class for parent selection strategies. Strategies include:
