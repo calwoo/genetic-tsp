@@ -52,7 +52,7 @@ class FPSStrat(Strategy):
         self.elite_threshold = elite_threshold
 
     def cumulative_fitness(self, rankings):
-        total_fitness = reduce(lambda x,y: x[1]+y[1], rankings)
+        total_fitness = reduce(lambda x,y: x+y[1], rankings, 0)
         cumulative = []
         running_total = 0
         for _, fitness in rankings:
