@@ -137,9 +137,35 @@ class Evolution:
         next_gen = self.mutate_population(children, mutation_rate)
         return next_gen
 
-    def run(self):
-        pass
+    def run(self, epochs=300, strategy, mutation_rate=0.05, verbose=True):
+        current_pop = self.generate_population()
+        current_fitness = self.population_avg_fitness(current_pop)
 
+        fitnesses = [current_fitness]
+        for i in range(epochs):
+            if verbose:
+                print("After %d epochs, fitness is around %.2f" % (i, current_fitness))
+            current_pop = self.next_generation(current_pop, strategy, mutation_rate)
+            current_fitness = self.population_avg_fitness(current_pop)
+            fitnesses.append(current_fitness)
+        final_population = self.next_generation(current_pop, strategy, mutation_rate)
+        final_fitness = self.population_avg_fitness(final_population)
+        fitnesses.append(final_fitness)
+        return final_population, fitnesses
+
+### Testing ground
+def generate_cities(num_cities=10, max_x=100, max_y=100):
+    cities = []
+    for i in range(num_cities):
+        x = random.random() * max_x
+        y = random.random() * max_y
+        city = CityNode(x, y)
+        cities.append(city)
+    return cities
+
+cities = generate_cities(25, 200, 200)
+model = Evolution(cities, population_size=100, elite_threshold=0.2)
+strategy = FPSStrat()
 
     
     
