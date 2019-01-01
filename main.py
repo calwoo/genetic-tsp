@@ -7,7 +7,7 @@ To recall, the traveling salesman problem asks for optimal tours about a group o
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-import utils
+from utils import ElitismStrat, FPSStrat, Visualizer
 
 """
 We need classes to store city nodes and the genetic algorithm.
@@ -21,7 +21,7 @@ class CityNode:
         self.coords = np.array([self.x, self.y])
 
     def dist_to(self, city):
-        d = np.sqrt((self.coords - city.coords) ** 2)
+        d = np.sqrt(np.sum((self.coords - city.coords) ** 2))
         return d
 
 """
@@ -71,7 +71,7 @@ class Evolution:
 
     def rank(self, population):
         fitnesses = list(map(lambda x: self.fitness(x), population))
-        zipped = zip(population, fitnesses)
+        zipped = list(zip(population, fitnesses))
         return sorted(zipped, key=lambda x: x[1], reverse=True)
 
     def select_parents(self, population, strategy):
@@ -137,7 +137,7 @@ class Evolution:
         next_gen = self.mutate_population(children, mutation_rate)
         return next_gen
 
-    def run(self, epochs=300, strategy, mutation_rate=0.05, verbose=True):
+    def run(self, epochs, strategy, mutation_rate=0.05, verbose=True):
         current_pop = self.generate_population()
         current_fitness = self.population_avg_fitness(current_pop)
 
