@@ -86,6 +86,7 @@ class Evolution:
         """
         num_to_retain = int(self.population_size * self.elite_threshold)
         children = parents[:num_to_retain]
+        print(len(parents), self.population_size)
         for i in range(self.population_size - num_to_retain):
             child = self.create_child(parents[i], parents[self.population_size-i-1])
             children.append(child)
