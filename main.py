@@ -137,21 +137,20 @@ class Evolution:
         next_gen = self.mutate_population(children, mutation_rate)
         return next_gen
 
-    def run(self, epochs, strategy, mutation_rate=0.05, verbose=True):
+    def run(self, epochs, strategy, visualizer, mutation_rate=0.05, verbose=True):
         current_pop = self.generate_population()
         current_fitness = self.population_avg_fitness(current_pop)
-
+        visualizer.update(current_fitness)
         fitnesses = [current_fitness]
         for i in range(epochs):
             if verbose and i % 20 == 0:
                 print("After %d epochs, fitness is around %.6f" % (i, current_fitness))
             current_pop = self.next_generation(current_pop, strategy, mutation_rate)
             current_fitness = self.population_avg_fitness(current_pop)
-            fitnesses.append(current_fitness)
+            visualizer.update(current_fitness)
         final_population = self.next_generation(current_pop, strategy, mutation_rate)
-        final_fitness = self.population_avg_fitness(final_population)
-        fitnesses.append(final_fitness)
-        return final_population, fitnesses
+        visualizer.plot_fitness()
+        return final_population
 
 ### Testing ground
 def generate_cities(num_cities=10, max_x=100, max_y=100):
@@ -166,7 +165,8 @@ def generate_cities(num_cities=10, max_x=100, max_y=100):
 cities = generate_cities(25, 200, 200)
 model = Evolution(cities, population_size=100, elite_threshold=0.2)
 strategy = FPSStrat(elite_threshold=0.2)
-results, fitnesses = model.run(epochs=500, strategy=strategy, mutation_rate=0.01, verbose=True)
-
+# Visualize data
+vis = Visualizer()
+results = model.run(epochs=100, strategy=strategy, visualizer=vis, mutation_rate=0.01, verbose=True)
     
     

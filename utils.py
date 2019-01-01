@@ -7,12 +7,27 @@ import random
 from functools import reduce
 
 class Visualizer:
-    def __init__(self, model):
-        self.model = model
+    def __init__(self):
         self.record = []
         self.generation = 0
+        self.fitnesses = []
+    
+    def reset_visualizer(self):
+        self.record = []
+        self.generation = 0
+        self.fitnesses = []
 
-    def plot_fitness(self, model):
+    def update(self, fitness):
+        self.fitnesses.append((self.generation, fitness))
+        self.generation += 1
+
+    def plot_fitness(self):
+        plt.plot(list(map(lambda x:x[1], self.fitnesses)))
+        plt.ylabel("Fitness")
+        plt.xlabel("Generation")
+        plt.show()
+
+    def plot_scores(self):
         pass
 
 
