@@ -109,13 +109,13 @@ class Evolution:
                 next_gene += 1
         return child
 
-    def mutate(self, child, mutation_chance=0.05):
+    def mutate(self, child, mutation_rate=0.05):
         """
         Mutation of individuals in the population proceed by swapping a pair of cities in the route randomly.
         """
         for i in range(len(self.cities)):
             prob = random.random()
-            if prob < mutation_chance:
+            if prob < mutation_rate:
                 swap_index = random.randint(len(self.cities))
                 # Do the swap
                 temp = child[swap_index]
@@ -123,14 +123,22 @@ class Evolution:
                 child[i] = temp
         return child
 
-    def mutate_population(self, population, mutation_chance=0.05):
+    def mutate_population(self, population, mutation_rate=0.05):
         mutated_pop = []
         for i in range(self.population_size):
             individual = population[i]
-            mutated_individual = self.mutate(individual, mutation_chance)
+            mutated_individual = self.mutate(individual, mutation_rate)
             mutated_pop.append(mutated_individual)
         return mutated_pop
-        
+
+    def next_generation(self, population, strategy, mutation_rate=0.05):
+        parents = self.select_parents(population, strategy)
+        children = self.mate(parents)
+        next_gen = self.mutate_population(children, mutation_rate)
+        return next_gen
+
+    def run(self):
+        pass
 
 
     
