@@ -8,7 +8,7 @@ import random
 from functools import reduce
 from matplotlib import style
 
-style.use('fivethirtyeight')
+style.use('ggplot')
 fig = plt.figure()
 
 class Visualizer:
