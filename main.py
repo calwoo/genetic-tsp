@@ -72,11 +72,11 @@ class Evolution:
     def rank(self, population):
         fitnesses = list(map(lambda x: self.fitness(x), population))
         zipped = list(zip(population, fitnesses))
-        return sorted(zipped, key=lambda x: x[1], reverse=True)
+        return sorted(zipped, key=lambda x: x[1], reverse=True), zipped[0][0]
 
     def select_parents(self, population, strategy):
-        ranked = self.rank(population)
-        return strategy.select_parents(ranked)
+        ranked, highest = self.rank(population)
+        return strategy.select_parents(ranked), highest
 
     def mate(self, parents):
         """
@@ -132,10 +132,10 @@ class Evolution:
         return mutated_pop
 
     def next_generation(self, population, strategy, mutation_rate=0.05):
-        parents = self.select_parents(population, strategy)
+        parents, highest = self.select_parents(population, strategy)
         children = self.mate(parents)
         next_gen = self.mutate_population(children, mutation_rate)
-        return next_gen
+        return next_gen, highest
 
     def run(self, epochs, strategy, visualizer, mutation_rate=0.05, verbose=True):
         current_pop = self.generate_population()
@@ -145,7 +145,9 @@ class Evolution:
         for i in range(epochs):
             if verbose and i % 20 == 0:
                 print("After %d epochs, fitness is around %.6f" % (i, current_fitness))
-            current_pop = self.next_generation(current_pop, strategy, mutation_rate)
+            current_pop, highest = self.next_generation(current_pop, strategy, mutation_rate)
+            if i % 50 == 0:
+                visualizer.add_to_record(highest)
             current_fitness = self.population_avg_fitness(current_pop)
             visualizer.update(current_fitness)
         final_population = self.next_generation(current_pop, strategy, mutation_rate)
@@ -167,6 +169,6 @@ model = Evolution(cities, population_size=100, elite_threshold=0.2)
 strategy = FPSStrat(elite_threshold=0.2)
 # Visualize data
 vis = Visualizer()
-results = model.run(epochs=100, strategy=strategy, visualizer=vis, mutation_rate=0.01, verbose=True)
+results = model.run(epochs=500, strategy=strategy, visualizer=vis, mutation_rate=0.01, verbose=True)
     
     

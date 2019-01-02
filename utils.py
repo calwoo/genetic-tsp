@@ -26,6 +26,10 @@ class Visualizer:
         self.fitnesses.append((self.generation, fitness))
         self.generation += 1
 
+    def add_to_record(self, individual):
+        new_record = (self.generation, individual)
+        self.record.append(new_record)
+
     def plot_fitness(self, i):
         plt.plot(list(map(lambda x:x[1], self.fitnesses)))
         plt.ylabel("Fitness")
@@ -33,6 +37,7 @@ class Visualizer:
         plt.show()
 
     def plot_scores(self, i):
+        plt.clf()
         plt.plot(list(map(lambda x: 1/x[1], self.fitnesses)))
         plt.ylabel("Average Distance")
         plt.xlabel("Generation")
@@ -45,6 +50,9 @@ class Visualizer:
             func = lambda i: self.plot_scores(i)
         ani = animation.FuncAnimation(fig, func, interval=1000)
         plt.show()
+
+    def plot_route(self, route):
+        pass
 
 """
 A class for parent selection strategies. Strategies include:
